@@ -6,11 +6,13 @@
 ![Author](https://img.shields.io/badge/developer-Guruh_Rachmat_P-blue)
 
 **gomaps** adalah *Command Line Interface (CLI)* untuk melakukan **scraping data dari Google Maps** berdasarkan *keyword* dan *lokasi*.  
-Dikembangkan dengan oleh **Guruh Rachmat Pribadi © 2025**, tool ini cocok untuk pengumpulan data bisnis, tempat umum, pendidikan, atau riset lokasi.
+Dikembangkan oleh **Guruh Rachmat Pribadi © 2025**, tool ini cocok untuk pengumpulan data bisnis, tempat umum, pendidikan, maupun riset berbasis lokasi.
 
-**gomaps** is a *Command Line Interface (CLI) tool* designed to **scrape data from Google Maps** based on a *keyword* and *location*.
-Developed by **Guruh Rachmat Pribadi © 2025**, this tool is ideal for collecting data on businesses, public places, educational institutions, or location-based research.
 ---
+
+**gomaps** is a *Command Line Interface (CLI) tool* designed to **scrape data from Google Maps** based on a *keyword* and *location*.  
+Developed by **Guruh Rachmat Pribadi © 2025**, this tool is ideal for collecting data on businesses, public places, educational institutions, and location-based research.
+
 
 ## ✨ Fitur Utama
 
