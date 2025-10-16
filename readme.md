@@ -1,4 +1,4 @@
-# 🗺️ gomaps — Google Maps Scraper CLI
+# 🗺️ gomaps - Google Maps Scraper CLI
 
 ![Go Version](https://img.shields.io/badge/Go-1.21%2B-00ADD8?logo=go)
 ![License](https://img.shields.io/badge/license-MIT-green)
@@ -6,8 +6,10 @@
 ![Author](https://img.shields.io/badge/developer-Guruh_Rachmat_P-blue)
 
 **gomaps** adalah *Command Line Interface (CLI)* untuk melakukan **scraping data dari Google Maps** berdasarkan *keyword* dan *lokasi*.  
-Dikembangkan dengan ❤️ oleh **Guruh Rachmat Pribadi © 2025**, tool ini cocok untuk pengumpulan data bisnis, tempat umum, pendidikan, atau riset lokasi.
+Dikembangkan dengan oleh **Guruh Rachmat Pribadi © 2025**, tool ini cocok untuk pengumpulan data bisnis, tempat umum, pendidikan, atau riset lokasi.
 
+**gomaps** is a *Command Line Interface (CLI) tool* designed to **scrape data from Google Maps** based on a *keyword* and *location*.
+Developed by **Guruh Rachmat Pribadi © 2025**, this tool is ideal for collecting data on businesses, public places, educational institutions, or location-based research.
 ---
 
 ## ✨ Fitur Utama
