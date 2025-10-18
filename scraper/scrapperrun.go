@@ -21,6 +21,13 @@ var data [][]string
 const DEFAULTADATASCROLL = 14
 
 func ScrapperRun(place, location string, limit int) {
+
+	// cek koneksi internet
+	ok := CheckInternetConnection()
+	if !ok {
+		log.Fatal("Program dihentikan karena tidak ada koneksi internet.")
+	}
+
 	fmt.Println("\nStarting scrapper...")
 	fmt.Println("====================")
 
@@ -67,7 +74,7 @@ func ScrapperRun(place, location string, limit int) {
 	log.Println("Selesai scrolling.")
 	fmt.Println("\nData akan otomatis terekspor menjadi csv (progress)")
 
-	var names, ratings, links, address []string
+	var names, ratings, links, address, phone []string
 
 	namesScrap := fmt.Sprintf(`Array.from(document.querySelectorAll("a.hfpxzc")).slice(0, %d).map(e => e.getAttribute("aria-label"))`, limit)
 	ratingsScrap := fmt.Sprintf(`Array.from(document.querySelectorAll(".MW4etd")).slice(0, %d).map(e => e.innerText)`, limit)
@@ -79,18 +86,21 @@ func ScrapperRun(place, location string, limit int) {
 		chromedp.Evaluate(ratingsScrap, &ratings),
 		chromedp.Evaluate(linksScrap, &links),
 	)
+
 	for i := range names {
-		var addressScrap string
-		err := chromedp.Run(ctx,
-			chromedp.Navigate(links[i]),
-			chromedp.WaitVisible(`button[data-item-id="address"] div.Io6YTe`, chromedp.ByQuery),
-			chromedp.Sleep(2*time.Second),
-			chromedp.Text(`button[data-item-id="address"] div.Io6YTe`, &addressScrap, chromedp.ByQuery),
-		)
+		err := chromedp.Run(ctx, chromedp.Navigate(links[i]))
 		if err != nil {
-			log.Fatal(err)
+			address = append(address, "N/A")
+			phone = append(phone, "N/A")
+			continue
 		}
+
+		addressScrap := getTextIfExists(ctx, `button[data-item-id="address"] div.Io6YTe`, 5*time.Second)
+		phoneScrap := getTextIfExists(ctx, `button[data-item-id^="phone:tel:"] div.Io6YTe`, 5*time.Second)
+
 		address = append(address, addressScrap)
+		phone = append(phone, phoneScrap)
+
 	}
 
 	if err != nil {
@@ -102,10 +112,10 @@ func ScrapperRun(place, location string, limit int) {
 	}
 
 	table := tablewriter.NewTable(os.Stdout)
-	table.Header("#", "Name", "Rate", "Link", "Address")
+	table.Header("#", "Name", "Rate", "Link", "Address", "Phone", "Web")
 
 	for i := range names {
-		data = append(data, []string{fmt.Sprintf("%d", i+1), names[i], safeIndex(ratings, i), safeIndex(links, i), safeIndex(address, i)})
+		data = append(data, []string{fmt.Sprintf("%d", i+1), names[i], safeIndex(ratings, i), beautifyLink(safeIndex(links, i)), potongString(safeIndex(address, i), 20), safeIndex(phone, i), "N/A"})
 	}
 	table.Bulk(data)
 	table.Render()
@@ -132,4 +142,28 @@ func predictJumlahScroll(jumlahData int) int {
 	var scrolls float64
 	scrolls = math.Ceil(float64(jumlahData) / DEFAULTADATASCROLL)
 	return int(scrolls)
+}
+
+func potongString(address string, maxLen int) string {
+	if len(address) > maxLen {
+		return address[:maxLen] + "..."
+	}
+	return address
+}
+
+func getTextIfExists(ctx context.Context, selector string, timeout time.Duration) string {
+	var text string
+	ctxWait, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+
+	err := chromedp.Run(ctxWait,
+		chromedp.WaitVisible(selector, chromedp.ByQuery),
+		chromedp.Text(selector, &text, chromedp.ByQuery),
+	)
+
+	if err != nil {
+		return "N/A"
+	}
+
+	return text
 }
